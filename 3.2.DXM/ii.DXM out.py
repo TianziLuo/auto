@@ -5,7 +5,7 @@ import os
 
 # Get today's date and generate filenames
 today_str = datetime.today().strftime("%Y%m%d")
-base_filename = f"出库_WT_{today_str}"
+base_filename = f"店小秘 更新库存_{today_str}"
 downloads_path = os.path.join(os.path.expanduser("~"), "Downloads")
 xlsx_path = os.path.join(downloads_path, f"{base_filename}.xlsx")
 xls_path = os.path.join(downloads_path, f"{base_filename}.xls")
