@@ -28,4 +28,11 @@ for root, _, files in os.walk(download_dir):
             if mtime == today_date:
                 today_files.append(full_path)
 
-# If matching files are found, copy t
+# If matching files are found, copy them to target directory
+if today_files:
+    for file_path in today_files:
+        dest_path = target_dir / file_path.name
+        shutil.copy2(file_path, dest_path)
+        print(f"✅ Copied: {file_path.name} to {target_dir}")
+else:
+    print(f"⚠️ No files found containing keywords {keywords} modified today")

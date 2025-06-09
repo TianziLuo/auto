@@ -4,11 +4,9 @@ from datetime import datetime
 import os
 
 # Get today's date and generate filenames
-today_str = datetime.today().strftime("%Y%m%d")
-base_filename = f"店小秘 更新库存_{today_str}"
-downloads_path = os.path.join(os.path.expanduser("~"), "Downloads")
+base_filename = f"店小秘 更新库存"
+downloads_path = r"C:\Frank\原始数据\店小秘+TP+订单+盘点"
 xlsx_path = os.path.join(downloads_path, f"{base_filename}.xlsx")
-xls_path = os.path.join(downloads_path, f"{base_filename}.xls")
 
 # Source and template paths
 source_path = r"C:\Frank\2.2_店小秘.xlsx"

@@ -5,7 +5,7 @@ import csv  # For setting quoting options
 excel_path = r'C:\Frank\合并文件\purchase_orders 合并.xlsx'
 
 # Path to the output CSV file
-csv_path = r'C:\Frank\合并文件\purchase_orders 合并4.csv'
+csv_path = r'C:\Frank\合并文件\purchase_orders 合并.csv'
 
 # Read the Excel file (default: first worksheet)
 df = pd.read_excel(excel_path)
