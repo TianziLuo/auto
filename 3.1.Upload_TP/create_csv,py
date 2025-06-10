@@ -1,0 +1,18 @@
+import os
+
+# 原始文件路径
+input_path = r"C:\Frank\易仓-TP\TP-Upload.csv"
+
+# 获取当前用户的下载目录
+downloads_folder = os.path.join(os.path.expanduser("~"), "Downloads")
+output_path = os.path.join(downloads_folder, "TP-Upload-FirstLineOnly.csv")
+
+# 读取第一行
+with open(input_path, "r", encoding="utf-8") as f:
+    first_line = f.readline()
+
+# 写入新文件
+with open(output_path, "w", encoding="utf-8") as f:
+    f.write(first_line)
+
+print(f"第一行已另存为：{output_path}")
