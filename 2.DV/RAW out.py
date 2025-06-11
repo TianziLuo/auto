@@ -16,7 +16,7 @@ template_path = r"C:\Template\出库.xlsx"
 
 # Load source workbook and worksheet
 source_wb = load_workbook(source_path, data_only=True)
-source_ws = source_wb["RAW扫码出库"]
+source_ws = source_wb["RAW扫码出库"]    
 
 # Load template workbook and use the first sheet
 template_wb = load_workbook(template_path)

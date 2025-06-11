@@ -1,10 +1,10 @@
 from playwright.sync_api import sync_playwright
-from playwright.sync_api import sync_playwright, expect
 import time
+import os
 
-USERNAME = "wayfaircolourtree"
-EMAIL = "wayfair.colourtree@gmail.com"
-PASSWORD = "Colourtree168!!"  
+USERNAME = "colourtree"
+EMAIL = "colourtreeusa@gmail.com"
+PASSWORD = "Colourtree168!"  # Replace with your actual password
 
 chrome_path = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
 
@@ -35,13 +35,12 @@ with sync_playwright() as p:
     page.get_by_text("Reject entire import", exact=True).click()
 
     # upload
-    page.set_input_files('input[type="file"]', r"C:\Frank\易仓-TP\TP-Upload.csv")
+    page.set_input_files('input[type="file"]', r"C:\Users\monica\Downloads\TP-Upload.csv")
 
     time.sleep(1)
     # import file
     page.get_by_text("Import CSV", exact=True).click()
-    page.wait_for_selector("text=Import CSV", timeout=10000)
+    page.wait_for_selector("text=Import CSV", timeout=1000000)
     input("🟢 文件上传完成，按 Enter 关闭浏览器...")
     browser.close()
-
 
