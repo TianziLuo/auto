@@ -22,7 +22,7 @@ source_ws = source_wb["515自发货"]
 template_wb = load_workbook(template_path)
 template_ws = template_wb.active
 
-# Define column and row ranges (E-H columns: 5-8, starting from row 3)
+# Define column and row ranges (E-H columns: 24-28, starting from row 3)
 start_col = 24
 end_col = 28
 start_row = 3

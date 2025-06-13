@@ -22,7 +22,7 @@ source_ws = source_wb["FBA扣减库存"]
 template_wb = load_workbook(template_path)
 template_ws = template_wb.active
 
-# Define column and row ranges (E-H columns: 5-8, starting from row 3)
+# Define column and row ranges (E-H columns: 20-23, starting from row 3)
 start_col = 20
 end_col = 23
 start_row = 3

@@ -22,7 +22,7 @@ source_ws = source_wb["BW出库一遍过"]
 template_wb = load_workbook(template_path)
 template_ws = template_wb.active
 
-# Define column and row ranges (E-H columns: 5-8, starting from row 3)
+# Define column and row ranges (E-H columns: 33-37, starting from row 3)
 start_col = 33
 end_col = 37
 start_row = 3
