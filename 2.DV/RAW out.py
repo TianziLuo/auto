@@ -2,17 +2,32 @@ from openpyxl import load_workbook
 import xlwt
 from datetime import datetime
 import os
+import time
+import sys
 
+# ------- config ------
+MAX_FILE_AGE = 30  # Save time in 30s
+source_path = r"C:\Frank\2.1_易仓管理.xlsx"
+template_path = r"C:\Template\出库.xlsx"
+
+# Verify that the source file is fresh enough
+try:
+    file_age_seconds = time.time() - os.path.getmtime(source_path)
+except FileNotFoundError:
+    print(f"❌ Source file not found: {source_path}")
+    sys.exit(1)
+
+if file_age_seconds > MAX_FILE_AGE:
+    print(
+        f"❌ Source file is {int(file_age_seconds)} s old (> {MAX_FILE_AGE}s). Aborting."
+    )
+    sys.exit(1)
 # Get today's date and generate filenames
 today_str = datetime.today().strftime("%Y%m%d")
 base_filename = f"出库_RAW_{today_str}"
 downloads_path = os.path.join(os.path.expanduser("~"), "Downloads")
 xlsx_path = os.path.join(downloads_path, f"{base_filename}.xlsx")
 xls_path = os.path.join(downloads_path, f"{base_filename}.xls")
-
-# Source and template paths
-source_path = r"C:\Frank\2.1_易仓管理.xlsx"
-template_path = r"C:\Template\出库.xlsx"
 
 # Load source workbook and worksheet
 source_wb = load_workbook(source_path, data_only=True)
@@ -61,3 +76,11 @@ for row_idx, row in enumerate(ws_xlsx.iter_rows(values_only=True)):
 # Save as .xls file
 wb_xls.save(xls_path)
 print(f"✅ Also saved as .xls: {xls_path}")
+
+# ---------- Clean up temporary .xlsx ----------
+if os.path.exists(xlsx_path):
+    try:
+        os.remove(xlsx_path)
+        print(f"🗑️ Deleted .xlsx file {xlsx_path}")
+    except OSError as e:
+        print(f"⚠️ Could not delete {xlsx_path}: {e}")
