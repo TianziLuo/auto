@@ -36,7 +36,6 @@ with sync_playwright() as p:
     page.click("text=Reports")
     page.wait_for_selector("text=Order Report", timeout=10000)
     page.click("text=Order Report")
-    print("✅ Entered Order Report page")
 
     # Select 'shipped' orders only
     page.locator('input.ant-checkbox-input[value="open"]').uncheck()
@@ -54,6 +53,4 @@ with sync_playwright() as p:
     download.save_as(file_path)
     print(f"✅ File saved and overwritten: {file_path}")
 
-    # Keep browser open until user confirms
-    input("🟢 Page is ready. Press Enter to close browser...")
     browser.close()

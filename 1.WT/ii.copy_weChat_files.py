@@ -6,9 +6,6 @@ from pathlib import Path
 source_dir = Path(r"C:\Users\monica\Documents\xwechat_files\qingchen536521_c584\msg\file\2025-06")
 target_dir = Path(r"C:\Frank\易仓-TP\无小票发货 Sarah")
 
-# Create target directory if it doesn't exist
-target_dir.mkdir(parents=True, exist_ok=True)
-
 # Keywords to search for in file names
 keywords = ["新范本", "店小秘 非BW", "店小秘 BW"]
 

@@ -1,5 +1,4 @@
 import os
-import time
 from openpyxl import load_workbook
 from openpyxl.styles import PatternFill
 import win32com.client as win32
@@ -13,13 +12,6 @@ xls_out_path   = os.path.join(downloads_dir, f"{base_name}.xls")
 SOURCE_PATH    = r"C:\Frank\1.1_核心.xlsx"
 TEMPLATE_PATH  = r"C:\Template\上传易仓SKU映射关系.xlsx"
 SHEET_NAME     = "上传易仓SKU映射关系"
-
-# ========= Safety: ensure the source file was saved within the last 30 seconds =========
-MAX_FILE_AGE  = time.time() - os.path.getmtime(SOURCE_PATH)
-if MAX_FILE_AGE > 30:
-    raise RuntimeError(
-        f"⚠️ Source file '{SOURCE_PATH}' was last saved {int(MAX_FILE_AGE)} seconds ago, exceeding the 30-second limit. Please save again and retry."
-    )
 
 # ========= Load workbooks =========
 src_wb  = load_workbook(SOURCE_PATH, data_only=True)
@@ -48,7 +40,7 @@ orange_fill = PatternFill(
     end_color="FFFDE9D9",
 )
 
-# ========= Copy values and apply fill =========
+# ========= Copy values + apply fill =========
 for row_src, row_dst in zip(
     range(START_ROW, last_row + 1),
     range(PASTE_ROW0, PASTE_ROW0 + (last_row - START_ROW + 1)),
@@ -57,36 +49,25 @@ for row_src, row_dst in zip(
         src_val  = src_ws.cell(row=row_src, column=col).value
         tgt_cell = tmpl_ws.cell(row=row_dst, column=col)
 
-        # Keep empty cells as empty strings; strip whitespace otherwise
+        # Preserve empty cells as empty strings; trim whitespace otherwise
         tgt_cell.value = "" if src_val is None else str(src_val).strip()
 
-        # Apply background color to columns A–C
+        # Apply background color to columns A‑C
         if col <= 3:
             tgt_cell.fill = orange_fill
 
 # ========= Save the .xlsx file =========
-# If an old version of the file exists, remove it first to avoid Excel opening an outdated copy
-if os.path.exists(xlsx_out_path):
-    os.remove(xlsx_out_path)
-
 tmpl_wb.save(xlsx_out_path)
-print("✅ Saved .xlsx")
+print(f"✅ Saved .xlsx")
 
 # ========= Use Excel COM to save as .xls =========
 excel = win32.gencache.EnsureDispatch("Excel.Application")
 excel.Visible       = False
 excel.DisplayAlerts = False
 
-try:
-    wb_excel = excel.Workbooks.Open(xlsx_out_path)
-    wb_excel.SaveAs(xls_out_path, FileFormat=56)  # 56 = .xls
-    wb_excel.Close()
-finally:
-    excel.Quit()
+wb_excel = excel.Workbooks.Open(xlsx_out_path)
+wb_excel.SaveAs(xls_out_path, FileFormat=56)  # 56 = .xls
+wb_excel.Close()
+excel.Quit()
 
-print("✅ Saved .xls")
-
-# ========= Delete the intermediate .xlsx file from Downloads =========
-if os.path.exists(xlsx_out_path):
-    os.remove(xlsx_out_path)
-    print("🗑️ Deleted .xlsx")
+print(f"✅ Saved .xls")

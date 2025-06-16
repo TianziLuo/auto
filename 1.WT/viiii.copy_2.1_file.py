@@ -1,26 +1,43 @@
 import os
 from pathlib import Path
 import shutil
-from datetime import datetime
+from datetime import datetime, timedelta
+import sys   # Used for early script exit
 
-# 原始文件路径
+# —————— Configuration ——————
+# Source file
 source_path = r"C:\Frank\2.1_易仓管理.xlsx"
 
-# 下载文件夹路径
+# Target directory
 download_dir = Path(os.path.expanduser('~')) / 'Downloads'
 
-# 获取当前日期的 MMDD 格式
-date_str = datetime.now().strftime('%m%d')
+# Maximum allowed time interval 
+MAX_FILE_AGE = 30 
 
-# 提取原文件名和扩展名
-original_filename = Path(source_path).stem  # 文件名不含扩展名
-extension = Path(source_path).suffix        # 文件扩展名，例如 .xlsx
+# 1) Check that the source file exists
+if not Path(source_path).is_file():
+    sys.exit(f"❌ Source file not found: {source_path}")
 
-# 构建新文件名
-new_filename = f"{original_filename} {date_str}{extension}"
-destination_path = download_dir / new_filename
+# 2) Verify the file’s last‑modified time
+mtime = datetime.fromtimestamp(os.path.getmtime(source_path))
+now   = datetime.now()
 
-# 执行复制操作
-shutil.copy2(source_path, destination_path)
+if now - mtime > timedelta(seconds=MAX_FILE_AGE):
+    # Too old — abort the copy
+    seconds_ago = int((now - mtime).total_seconds())
+    sys.exit(
+        f"⚠️ Last saved {seconds_ago} seconds ago, "
+        f"exceeding the {MAX_FILE_AGE}‑second limit; copy aborted."
+    )
 
-print(f"✅ 文件已复制到: {destination_path}")
+# 3) Build the destination filename
+date_str  = now.strftime('%m%d')           # Current date in MMDD format
+stem      = Path(source_path).stem         # Filename without extension
+extension = Path(source_path).suffix       # File extension 
+new_name  = f"{stem} {date_str}{extension}"
+dest_path = download_dir / new_name
+
+# 4) Perform the copy
+shutil.copy2(source_path, dest_path)
+
+print(f"✅ File copied to: {dest_path}")
